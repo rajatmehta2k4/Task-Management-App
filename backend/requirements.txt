@@ -1,0 +1,10 @@
+flask
+flask-cors
+supabase
+python-dotenv
+requests
+google-auth
+google-auth-oauthlib
+google-api-python-client
+gunicorn
+websockets
