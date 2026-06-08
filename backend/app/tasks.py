@@ -34,7 +34,7 @@ def require_auth(f):
 @tasks_bp.route('/', methods=['GET'])
 @require_auth
 def get_tasks():
-    supabase = get_supabase()  # ← fresh client in every route
+    supabase = get_supabase()
     user_id = request.current_user.id
 
     query = supabase.table('tasks').select(
@@ -48,11 +48,10 @@ def get_tasks():
 
     assigned_filter = request.args.get('assigned_to_me')
     if assigned_filter == 'true':
-        query = query.eq('assigned_to', user_id)
+        query = query.or_(f'created_by.eq.{user_id},assigned_to.eq.{user_id}')
 
     result = query.order('created_at', desc=True).execute()
     return jsonify(result.data), 200
-
 
 @tasks_bp.route('/', methods=['POST'])
 @require_auth
