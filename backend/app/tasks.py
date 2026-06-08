@@ -75,7 +75,15 @@ def create_task():
     }
 
     result = supabase.table('tasks').insert(new_task).execute()
-    created_task = result.data[0]
+    created_task_id = result.data[0]['id']
+
+    # Fetch the full task with joined profile data
+    full_task = supabase.table('tasks').select(
+        '*, created_by_profile:profiles!tasks_created_by_fkey(id, full_name, email, avatar_url), '
+        'assigned_to_profile:profiles!tasks_assigned_to_fkey(id, full_name, email, avatar_url)'
+    ).eq('id', created_task_id).single().execute()
+
+    created_task = full_task.data
 
     if created_task.get('assigned_to'):
         try:

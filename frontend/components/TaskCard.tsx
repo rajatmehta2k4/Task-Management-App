@@ -1,6 +1,7 @@
 'use client'
 
 import { Task, updateTask, deleteTask } from '@/lib/api'
+import { useState } from 'react'
 import { FaRegCalendarAlt } from 'react-icons/fa'
 import { MdDeleteForever } from 'react-icons/md'
 // '@/' is an alias for the root of the project (configured in next.config.ts)
@@ -14,6 +15,9 @@ interface TaskCardProps {
 }
 
 export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: TaskCardProps) {
+
+    const [updating, setUpdating] = useState(false)
+
     // Status color mapping — visual indicator for task status
     const statusColors = {
         pending: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
@@ -33,21 +37,30 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
     const canEdit = isCreator || isAssignee
 
     async function handleStatusChange(newStatus: Task['status']) {
+        setUpdating(true)
+        // Optimistic update — instant UI change
+        onUpdate({ ...task, status: newStatus })
+
         try {
             await updateTask(task.id, { status: newStatus })
-            onUpdate({ ...task, status: newStatus })
         } catch (err: unknown) {
+            // Revert if failed
+            onUpdate({ ...task, status: task.status })
             const message = err instanceof Error ? err.message : 'Failed to update task status'
             alert(message)
+        } finally {
+            setUpdating(false)
         }
     }
 
     async function handleDelete() {
         if (!confirm('Are you sure you want to delete this task?')) return
+        setUpdating(true)
         try {
             await deleteTask(task.id)
             onDelete(task.id)
         } catch (err: unknown) {
+            setUpdating(false)
             const message = err instanceof Error ? err.message : 'Failed to delete task'
             alert(message)
         }
@@ -117,25 +130,28 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
                     {task.status === 'pending' && (
                         <button
                             onClick={() => handleStatusChange('in_progress')}
-                            className="flex-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium py-2 rounded-lg transition-colors"
+                            disabled={updating}
+                            className="flex-1 text-xs bg-blue-50 text-blue-700 hover:bg-blue-100 font-medium py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Start →
+                            {updating ? '...' : 'Start →'}
                         </button>
                     )}
 
                     {(task.status === 'pending' || task.status === 'in_progress') && (
                         <button
                             onClick={() => handleStatusChange('completed')}
-                            className="flex-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 font-medium py-2 rounded-lg transition-colors"
+                            disabled={updating}
+                            className="flex-1 text-xs bg-green-50 text-green-700 hover:bg-green-100 font-medium py-2 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            ✓ Complete
+                            {updating ? '...' : '✓ Complete'}
                         </button>
                     )}
 
                     {isCreator && (
                         <button
                             onClick={handleDelete}
-                            className="text-xs bg-red-50 text-red-600 hover:bg-red-100 font-medium py-2 px-3 rounded-lg transition-colors"
+                            disabled={updating}
+                            className="text-xs bg-red-50 text-red-600 hover:bg-red-100 font-medium py-2 px-3 rounded-lg transition-colors disabled:opacity-50"
                         >
                             <MdDeleteForever size={20} />
                         </button>

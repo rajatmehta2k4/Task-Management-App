@@ -54,7 +54,6 @@ export interface CreateTaskData {
   assigned_to?: string
 }
 
-// ─── API Functions ───────────────────────────────────────────────────────────
 
 export async function fetchTasks(filters?: { status?: string; assigned_to_me?: boolean }): Promise<Task[]> {
   // Build query string from filters object
