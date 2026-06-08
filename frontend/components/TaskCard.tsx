@@ -33,23 +33,23 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
     const canEdit = isCreator || isAssignee
 
     async function handleStatusChange(newStatus: Task['status']) {
-    try {
-      await updateTask(task.id, { status: newStatus })
-      onUpdate({ ...task, status: newStatus })
-    } catch (_error) {
-      alert('Failed to update task status')
+        try {
+            await updateTask(task.id, { status: newStatus })
+            onUpdate({ ...task, status: newStatus })
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Failed to update task status'
+            alert(message)
+        }
     }
-  }
 
     async function handleDelete() {
         if (!confirm('Are you sure you want to delete this task?')) return
-        // confirm() shows a browser dialog — user must confirm before deleting
-
         try {
             await deleteTask(task.id)
-            onDelete(task.id)  // Tell parent to remove this task from its list
-        } catch (_error) {
-            alert('Failed to delete task')
+            onDelete(task.id)
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : 'Failed to delete task'
+            alert(message)
         }
     }
 
@@ -62,7 +62,7 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
     }
 
     return (
-        <div className={`bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-shadow ${ task.status === 'completed' ? 'border-green-200 opacity-75' : task.status === 'pending' ? 'border-yellow-200' : task.status === 'in_progress'? 'border-blue-200': 'border-gray-100'
+        <div className={`bg-white rounded-xl border-2 p-5 shadow-sm hover:shadow-md transition-shadow ${task.status === 'completed' ? 'border-green-200 opacity-75' : task.status === 'pending' ? 'border-yellow-200' : task.status === 'in_progress' ? 'border-blue-200' : 'border-gray-100'
             }`}>
             {/* Task header: title + status badge */}
             <div className="flex items-start justify-between gap-3 mb-3">
