@@ -22,7 +22,7 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
     }
 
     const priorityColors = {
-        low: 'bg-gray-100 text-gray-600',
+        low: 'bg-green-100 text-green-600',
         medium: 'bg-orange-100 text-orange-700',
         high: 'bg-red-100 text-red-700',
     }
