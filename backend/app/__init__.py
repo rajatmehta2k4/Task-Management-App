@@ -22,8 +22,9 @@ def create_app():
     # Browsers block requests from different domains by default.
     # This tells Flask to allow requests from our Next.js frontend URL.
     CORS(app, origins=[
-        os.environ.get('FRONTEND_URL', 'http://localhost:3000')
-    ], supports_credentials=True)
+    os.environ.get('FRONTEND_URL', 'http://localhost:3000'),
+    'http://localhost:3000',
+], supports_credentials=True)
     # supports_credentials=True allows cookies/auth headers to be sent
     
     # Register blueprints (groups of related routes)

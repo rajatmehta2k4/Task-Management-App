@@ -30,6 +30,7 @@ export default function DashboardContent() {
             setTasks(tasksData)
             setUsers(usersData)
             setCurrentUser(userData)
+            console.log('Current user data:', userData)
 
             if (!userData) {
                 router.push('/')
@@ -40,6 +41,8 @@ export default function DashboardContent() {
             setLoading(false)
         }
     }, [statusFilter, assignedFilter, router])
+
+
 
     useEffect(() => {
         const token = searchParams.get('token')
@@ -162,8 +165,8 @@ export default function DashboardContent() {
                     <button
                         onClick={() => setAssignedFilter(prev => !prev)}
                         className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${assignedFilter
-                                ? 'bg-indigo-600 text-white border-indigo-600'
-                                : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
+                            ? 'bg-indigo-600 text-white border-indigo-600'
+                            : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
                             }`}
                     >
                         My Tasks
