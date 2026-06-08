@@ -26,17 +26,23 @@ export default function DashboardContent() {
                 fetchUsers(),
                 fetchCurrentUser()
             ])
-
+    
+            // If user not found (deleted account) — clear token and redirect
+            if (!userData) {
+                clearAuthToken()  // ← clear the bad token
+                router.push('/')
+                return
+            }
+    
             setTasks(tasksData)
             setUsers(usersData)
             setCurrentUser(userData)
-            console.log('Current user data:', userData)
-
-            if (!userData) {
-                router.push('/')
-            }
+    
         } catch (error) {
             console.error('Failed to load data:', error)
+            // On any error — clear token and go to login
+            clearAuthToken()
+            router.push('/')
         } finally {
             setLoading(false)
         }
@@ -51,14 +57,22 @@ export default function DashboardContent() {
             router.replace('/dashboard')
             return
         }
-
+    
         const storedToken = localStorage.getItem('auth_token')
         if (!storedToken) {
             router.push('/')
             return
         }
-
-        loadData()
+    
+        // Add timeout — if loading takes more than 15 seconds, redirect to login
+        const timeout = setTimeout(() => {
+            console.log('Loading timeout — redirecting to login')
+            clearAuthToken()
+            router.push('/?error=timeout')
+        }, 15000) // 15 seconds
+    
+        loadData().finally(() => clearTimeout(timeout))
+    
     }, [searchParams, router, loadData])
 
     function handleLogout() {
@@ -90,7 +104,19 @@ export default function DashboardContent() {
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
                     <div className="w-12 h-12 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-                    <p className="text-gray-500">Loading your tasks...</p>
+                    <p className="text-gray-600 font-medium">Loading your tasks...</p>
+                    <p className="text-gray-400 text-sm mt-2">
+                        First load may take ~30 seconds (server waking up)
+                    </p>
+                    <button
+                        onClick={() => {
+                            clearAuthToken()
+                            router.push('/')
+                        }}
+                        className="mt-6 text-sm text-indigo-500 hover:text-indigo-700 underline"
+                    >
+                        Taking too long? Click here to go back
+                    </button>
                 </div>
             </div>
         )
