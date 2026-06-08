@@ -3,12 +3,12 @@
 'use client'
 
 import { useState } from 'react'
-import { createTask, CreateTaskData, User } from '@/lib/api'
+import { createTask, CreateTaskData, User, Task  } from '@/lib/api'
 
 interface TaskFormProps {
     users: User[]              // List of all users (for assignment dropdown)
     currentUserId: string
-    onTaskCreated: (task: any) => void  // Called after successful task creation
+    onTaskCreated: (task: Task) => void  // Called after successful task creation
     onClose: () => void        // Called to close the modal
 }
 
