@@ -12,7 +12,10 @@ def create_app():
     # Wildcard CORS — allows ALL origins
     # We'll restrict this after confirming it works
     CORS(app,
-         resources={r"/api/*": {"origins": "*"}},
+         resources={r"/api/*": {"origins": [
+         "https://task-management-app07.vercel.app",
+         "http://localhost:3000"
+     ]}},
          allow_headers=["Content-Type", "Authorization"],
          methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
          supports_credentials=False
