@@ -5,7 +5,6 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchTasks, fetchUsers, fetchCurrentUser, setAuthToken, clearAuthToken, Task, User } from '@/lib/api'
 import TaskCard from '@/components/TaskCard'
 import TaskForm from '@/components/TaskForm'
-import Image from 'next/image'
 
 export default function DashboardContent() {
     const router = useRouter()
