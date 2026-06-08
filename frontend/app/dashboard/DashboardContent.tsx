@@ -134,17 +134,22 @@ export default function DashboardContent() {
             <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Stats */}
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                    {[
-                        { label: 'Total', value: stats.total, color: 'indigo' },
-                        { label: 'Pending', value: stats.pending, color: 'yellow' },
-                        { label: 'In Progress', value: stats.inProgress, color: 'blue' },
-                        { label: 'Completed', value: stats.completed, color: 'green' },
-                    ].map(stat => (
-                        <div key={stat.label} className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-                            <div className={`text-3xl font-bold text-${stat.color}-600`}>{stat.value}</div>
-                            <div className="text-sm text-gray-500 mt-1">{stat.label}</div>
-                        </div>
-                    ))}
+                    <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                        <div className="text-3xl font-bold text-indigo-600">{stats.total}</div>
+                        <div className="text-sm text-gray-500 mt-1">Total</div>
+                    </div>
+                    <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                        <div className="text-3xl font-bold text-yellow-500">{stats.pending}</div>
+                        <div className="text-sm text-gray-500 mt-1">Pending</div>
+                    </div>
+                    <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                        <div className="text-3xl font-bold text-blue-600">{stats.inProgress}</div>
+                        <div className="text-sm text-gray-500 mt-1">In Progress</div>
+                    </div>
+                    <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
+                        <div className="text-3xl font-bold text-green-600">{stats.completed}</div>
+                        <div className="text-sm text-gray-500 mt-1">Completed</div>
+                    </div>
                 </div>
 
                 {/* Filters + Create button */}
