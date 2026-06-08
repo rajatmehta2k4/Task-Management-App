@@ -8,6 +8,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { fetchTasks, fetchUsers, fetchCurrentUser, setAuthToken, clearAuthToken, Task, User } from '@/lib/api'
 import TaskCard from '@/components/TaskCard'
 import TaskForm from '@/components/TaskForm'
+import Image from 'next/image'
 
 export default function DashboardPage() {
   const router = useRouter()
@@ -29,7 +30,7 @@ export default function DashboardPage() {
     try {
       // Fetch tasks and users in parallel for faster loading
       const [tasksData, usersData, userData] = await Promise.all([
-        fetchTasks({ status: statusFilter || undefined, assigned_to_me: assignedFilter}),
+        fetchTasks({ status: statusFilter || undefined, assigned_to_me: assignedFilter }),
         fetchUsers(),
         fetchCurrentUser()
       ])
@@ -48,7 +49,7 @@ export default function DashboardPage() {
     } finally {
       setLoading(false)
     }
-  }, [statusFilter,assignedFilter, router])
+  }, [statusFilter, assignedFilter, router])
   // Dependencies: re-run when these values change
 
   useEffect(() => {
@@ -128,10 +129,12 @@ export default function DashboardPage() {
 
         <div className="flex items-center gap-4">
           {currentUser?.avatar_url && (
-            <img
+            <Image
               src={currentUser.avatar_url}
               alt={currentUser.full_name}
-              className="w-9 h-9 rounded-full border-2 border-gray-200"
+              width={36}
+              height={36}
+              className="rounded-full border-2 border-gray-200"
             />
           )}
           <span className="text-sm font-medium text-gray-700 hidden sm:block">
@@ -182,11 +185,10 @@ export default function DashboardPage() {
           <button
             onClick={() => setAssignedFilter(prev => !prev)}
             // Toggle filter on/off
-            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${
-              assignedFilter 
-                ? 'bg-indigo-600 text-white border-indigo-600' 
+            className={`px-4 py-2 rounded-xl text-sm font-medium border transition-all ${assignedFilter
+                ? 'bg-indigo-600 text-white border-indigo-600'
                 : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300'
-            }`}
+              }`}
           >
             My Tasks
           </button>

@@ -36,7 +36,7 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
     try {
       await updateTask(task.id, { status: newStatus })
       onUpdate({ ...task, status: newStatus })
-    } catch (error) {
+    } catch (_error) {
       alert('Failed to update task status')
     }
   }
@@ -48,7 +48,7 @@ export default function TaskCard({ task, currentUserId, onUpdate, onDelete }: Ta
         try {
             await deleteTask(task.id)
             onDelete(task.id)  // Tell parent to remove this task from its list
-        } catch (error) {
+        } catch (_error) {
             alert('Failed to delete task')
         }
     }

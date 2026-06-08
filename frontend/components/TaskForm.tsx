@@ -47,10 +47,11 @@ export default function TaskForm({ users, currentUserId, onTaskCreated, onClose 
             onTaskCreated(newTask)  // Tell parent about the new task
             onClose()               // Close the modal
 
-        } catch (err: any) {
-            setError(err.message || 'Failed to create task')
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to create task'
+            setError(errorMessage)
         } finally {
-            setLoading(false)  // Always runs, whether success or error
+            setLoading(false)
         }
     }
 
