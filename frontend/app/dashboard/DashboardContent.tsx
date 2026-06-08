@@ -143,7 +143,7 @@ export default function DashboardContent() {
                         <div className="text-sm text-gray-500 mt-1">Pending</div>
                     </div>
                     <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-                        <div className="text-3xl font-bold text-blue-600">{stats.inProgress}</div>
+                        <div className="text-3xl font-bold text-orange-600">{stats.inProgress}</div>
                         <div className="text-sm text-gray-500 mt-1">In Progress</div>
                     </div>
                     <div className="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
@@ -159,7 +159,7 @@ export default function DashboardContent() {
                     <select
                         value={statusFilter}
                         onChange={(e) => setStatusFilter(e.target.value)}
-                        className="px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
+                        className="px-4 py-2 border border-gray-200 rounded-xl text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
                     >
                         <option value="">All Status</option>
                         <option value="pending">Pending</option>
